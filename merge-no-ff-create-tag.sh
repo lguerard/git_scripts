@@ -10,7 +10,11 @@ if [ $# -ne 0 ]; then
     exit_usage
 fi
 
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 DEFAULT_BRANCH=$(basename $(git symbolic-ref --short refs/remotes/origin/HEAD))
+
+echo $CURRENT_BRANCH
+echo $DEFAULT_BRANCH
 
 git checkout "$DEFAULT_BRANCH"
 CURRENT_TAG=$(git describe --abbrev=0 --tags)
@@ -31,7 +35,7 @@ REPO_NAME=$(basename "$PWD")
 CURRENT_TAG="$REPO_NAME-$VERSION"
 echo $CURRENT_TAG
 
-git merge --no-ff dev --no-edit
+git merge --no-ff $CURRENT_BRANCH --no-edit
 git tag -a $CURRENT_TAG -m ""
 git push origin $CURRENT_TAG
 git push origin
